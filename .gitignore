@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment
+.env
+.venv
+
+# IDE
+.vscode/
+
+# Logs
+logs/
+
+# User uploads
+uploads/
+
+# Data (not needed for Streamlit inference)
+data/raw/
+data/processed/
+
+# Notebooks
+notebooks/
+
+# OS
+.DS_Store
+Thumbs.db
+

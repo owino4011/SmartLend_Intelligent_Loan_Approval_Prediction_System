@@ -1,0 +1,4 @@
+[console_scripts]
+evaluate_model = scripts.evaluate_model:main
+run_app = app:main
+train_model = scripts.train_model:main
