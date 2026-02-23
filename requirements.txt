@@ -10,3 +10,5 @@ imbalanced_learn
 streamlit
 mysql-connector-python
 requests
+
+altair==4.2.2
