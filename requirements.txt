@@ -4,7 +4,7 @@ scikit-learn
 matplotlib
 seaborn
 joblib
-streamlit
+streamlit>=1.31.1
 pyyaml
 imbalanced_learn
 streamlit
