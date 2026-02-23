@@ -8,6 +8,7 @@ from auth import auth as auth_logic
 from dashboards import admin_dashboard
 import uuid
 import time
+import requests
 
 #Logger
 logger = get_logger("streamlit", "logs/streamlit_output.log")
@@ -350,6 +351,47 @@ from auth import db
 
 #ORIGINAL APP CODE STARTS HERE
 MODEL_PATH = "models/loan_approval_model.pkl"
+
+# ------------------ Begin: model-download helper ------------------
+MODEL_URL = "https://github.com/owino4011/SmartLend_Intelligent_Loan_Approval_Prediction_System/releases/download/v1/loan_approval_model.pkl"
+
+def download_model_if_missing(model_path_str: str = MODEL_PATH, model_url: str = MODEL_URL):
+    model_path = Path(model_path_str)
+    if model_path.exists():
+        return
+    model_path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        with requests.get(model_url, stream=True, timeout=60) as r:
+            r.raise_for_status()
+            total = int(r.headers.get("content-length", 0))
+            chunk_size = 8192
+            with open(model_path, "wb") as f:
+                if total:
+                    downloaded = 0
+                    with st.spinner("Downloading model..."):
+                        progress = st.progress(0)
+                        for chunk in r.iter_content(chunk_size=chunk_size):
+                            if chunk:
+                                f.write(chunk)
+                                downloaded += len(chunk)
+                                pct = int(downloaded / total * 100)
+                                progress.progress(min(pct, 100))
+                else:
+                    with st.spinner("Downloading model..."):
+                        for chunk in r.iter_content(chunk_size=chunk_size):
+                            if chunk:
+                                f.write(chunk)
+    except Exception as e:
+        st.warning(f"Model download failed: {e}")
+        raise
+
+try:
+    download_model_if_missing()
+except Exception:
+    # allow app to continue so joblib.load handles absence gracefully
+    pass
+# ------------------ End: model-download helper ------------------
+
 UPLOADS_DIR = Path("uploads")
 UPLOADS_DIR.mkdir(exist_ok=True)
 

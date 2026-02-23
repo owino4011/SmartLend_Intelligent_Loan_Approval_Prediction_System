@@ -9,3 +9,4 @@ pyyaml
 imbalanced_learn
 streamlit
 mysql-connector-python
+requests
